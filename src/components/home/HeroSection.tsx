@@ -43,7 +43,7 @@ const HeroSection = () => {
     >
       {/* Sticky viewport — stays on screen while we scroll through the 180vh */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center px-4 md:px-8 xl:px-0 pt-[9px] pb-[64px]">
-        <div className="relative z-20 w-full max-w-[1400px] h-full flex flex-col justify-start lg:justify-center">
+        <div className="relative z-20 w-full max-w-[1500px] xl:px-8 h-full flex flex-col justify-start lg:justify-center">
           {/* Text Container (framer-155x0r8) */}
           <motion.div
             style={{ y: textContainerY, opacity: textContainerOpacity }}
