@@ -70,7 +70,7 @@ const Index = () => {
     smoothProgress,
     [0, 0.125, 0.187, 0.375, 0.468, 1],
     isMobile
-      ? ["12vh", "12vh", "20vh", "20vh", "10vh", "10vh"]
+      ? ["15vh", "15vh", "45vh", "45vh", "35vh", "35vh"]
       : ["-2vh", "45vh", "45vh", "45vh", "5vh", "5vh"]
   );
 
