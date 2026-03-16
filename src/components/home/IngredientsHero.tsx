@@ -1,23 +1,22 @@
 import { motion, useScroll, useTransform, useSpring, MotionValue } from "framer-motion";
 import { useRef } from "react";
 
-interface IngredientsHeroProps {}
+interface IngredientsHeroProps { }
 
 const IngredientsHero = (props: IngredientsHeroProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Strictly use local scroll for reliable text animations 
+  // Use "start end" to "end start" so progress runs while section is in view
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end end"],
+    offset: ["start end", "end start"],
   });
 
-  // Spring for smoother movement
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 60, damping: 20 });
+  // Spring for faster movement
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 300, damping: 30 });
 
-  // Container rises into view, pauses, then moves up to exit
-  const containerY = useTransform(smoothProgress, [0.1, 0.25, 0.6, 0.9], [60, 0, 0, -250]);
-  const containerOpacity = useTransform(smoothProgress, [0.1, 0.2, 0.8, 0.95], [0, 1, 1, 0]);
+  // Container fades in as it enters and out as it leaves
+  const containerOpacity = useTransform(smoothProgress, [0.3, 0.4, 0.6, 0.75], [0, 1, 1, 0]);
 
   const part1 = "Five proven ingredients that actually work.".split(" ");
   const line2Part1 = "Less bottles. Better skin.".split(" ");
@@ -26,18 +25,17 @@ const IngredientsHero = (props: IngredientsHeroProps) => {
   const totalWords = part1.length + line2Part1.length + line2Part2.length;
 
   const Word = ({ word, index, color, isBold = false }: { word: string; index: number; color: string; isBold?: boolean }) => {
-    // Wait for product to arrive, then start text at 0.2 local scroll
-    const revealStart = 0.2 + (index / totalWords) * 0.25;
-    const revealEnd = revealStart + 0.1;
+    // Faster reveal - words appear quickly (from 0.3 to 0.5)
+    const revealStart = 0.3 + (index / totalWords) * 0.2;
+    const revealEnd = revealStart + 0.05;
 
-    // Smooth reveal animations — blur to clear, fade in, slide up
+    // Fast reveal animations — blur to clear and fade in
     const opacity = useTransform(smoothProgress, [revealStart, revealEnd], [0, 1]);
     const blur = useTransform(smoothProgress, [revealStart, revealEnd], ["blur(8px)", "blur(0px)"]);
-    const wordY = useTransform(smoothProgress, [revealStart, revealEnd], [20, 0]);
 
     return (
       <motion.span
-        style={{ opacity, filter: blur, y: wordY }}
+        style={{ opacity, filter: blur }}
         className={`inline-block mr-[0.2em] last:mr-0 ${isBold ? "font-bold" : "font-medium"} ${color}`}
       >
         {word}
@@ -48,12 +46,12 @@ const IngredientsHero = (props: IngredientsHeroProps) => {
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-[180vh] bg-transparent"
+      className="relative w-full h-[155vh] bg-transparent"
     >
-      {/* Sticky viewport — content stays pinned while scroll progresses */}
+      {/* Sticky viewport - content stays pinned in center */}
       <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden">
         <motion.div
-          style={{ y: containerY, opacity: containerOpacity }}
+          style={{ opacity: containerOpacity }}
           className="section-container relative z-10 flex flex-col items-center text-center"
         >
           <div className="max-w-[1200px] px-0 md:px-0">

@@ -9,9 +9,9 @@ const handles = [
 
 const InstagramGallery = () => {
   return (
-    <section className="bg-[#F8F5F0] pt-[80px] lg:pt-[40px] pb-[100px] lg:pb-[160px] overflow-hidden relative">
+    <section className="bg-[#F8F5F0] pt-[80px] lg:pt-[40px] pb-[100px] lg:pb-[160px] relative">
       {/* Header Container */}
-      <div className="section-container mb-[48px] lg:mb-[72px] flex flex-col md:flex-row justify-between items-start md:items-end px-4 md:px-8 lg:px-[30px] xl:px-[44px] max-w-full">
+      <div className="section-container max-w-[1500px] mx-auto px-5 md:px-8 lg:px-[36px] xl:pr-[30px] mb-[48px] lg:mb-[72px] flex flex-col md:flex-row justify-between items-start md:items-end">
         <div className="shrink-0 mb-6 lg:mb-8 md:mb-0">
           <h2 className="font-geist font-medium text-[30px] md:text-[44px] lg:text-[55px] xl:text-[64px] leading-[1.1] lg:leading-[55px] xl:leading-[70px] text-[#3a3d38] tracking-[-1.5px] md:tracking-[-2.56px]">
             Our journey<br />continues on social.

@@ -17,7 +17,7 @@ const ProductPreviewSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section ref={containerRef} className="bg-[#F8F5F0] py-12 md:pb-24 md:mt-10 overflow-hidden">
+    <section ref={containerRef} className="bg-[#F8F5F0] py-12 md:pb-24 md:mt-10 ">
       <motion.div 
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}

@@ -73,7 +73,7 @@ const ResultsSection = () => {
 
   return (
     <section className="bg-background py-12 md:py-24">
-      <div className="section-contain mx-auto px-2 md:px-8 lg:px-[32px] xl:px-[48px]">
+      <div className="section-container max-w-[1500px] mx-auto">
         <div className="bg-[#D4DCCF] rounded-[8px] p-4 md:p-4 lg:p-4 relative overflow-hidden flex flex-col lg:min-h-[1600px]">
           
           {/* Header Title */}

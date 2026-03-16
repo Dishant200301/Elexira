@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
 
 // Assets from the HTML dump
@@ -20,12 +20,18 @@ const HeroSection = () => {
     offset: ["start start", "end end"],
   });
 
-  // Text moves UP and fades out in first half of scroll
-  const textContainerY = useTransform(scrollYProgress, [0, 0.5], [0, -400]);
-  const textContainerOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
+  // Smooth progress for the entire section
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 60, damping: 20, mass: 0.5 });
 
-  // Hand moves DOWN below the screen — exits fully before section ends
-  const handY = useTransform(scrollYProgress, [0, 0.8], [0, 700]);
+  // Text moves UP and fades out in first half of scroll
+  const textContainerY = useTransform(smoothProgress, [0, 0.5], [0, -400]);
+  const textContainerOpacity = useTransform(smoothProgress, [0, 0.4], [1, 0]);
+
+  // Hand moves DOWN exactly together with the product (47vh delta)
+  // Matching global scroll: product settles at 80vh.
+  // Hero section is 120vh, so local progress is 80/120 = 0.666.
+  // After settling, the hand continues DOWN to exit the screen.
+  const handY = useTransform(smoothProgress, [0, 0.444, 1], ["0vh", "47vh", "150vh"]);
 
   const headingText = "Your healthiest skin revealed.";
   const sublineText = "We strip away the unnecessary to focus on what truly works.";
@@ -39,7 +45,7 @@ const HeroSection = () => {
     <section
       ref={sectionRef}
       id="hero"
-      className="relative w-full h-[180vh] bg-transparent"
+      className="relative w-full h-[130vh] bg-transparent"
     >
       {/* Sticky viewport — stays on screen while we scroll through the 180vh */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center px-4 md:px-8 xl:px-0 pt-[9px] pb-[64px]">
@@ -47,7 +53,7 @@ const HeroSection = () => {
           {/* Text Container (framer-155x0r8) */}
           <motion.div
             style={{ y: textContainerY, opacity: textContainerOpacity }}
-            className="flex flex-col lg:flex-row items-start justify-between w-full mt-[2vh] md:mt-[4vh] lg:mt-[-5vh]"
+            className="flex flex-col lg:flex-row items-start justify-between w-full mt-[2vh] md:mt-[4vh] lg:mt-[-20vh]"
           >
             {/* Left: Heading / Rating */}
             <div className="flex flex-col items-start gap-4 md:gap-12 lg:gap-16">

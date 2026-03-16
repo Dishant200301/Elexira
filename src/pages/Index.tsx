@@ -37,36 +37,48 @@ const Index = () => {
 
   // Spring configuration for silky smooth movement
   const springConfig = { stiffness: 60, damping: 20, mass: 0.5, restDelta: 0.001 };
-
+  const smoothProgress = useSpring(scrollYProgress, springConfig);
 
   // Layer 3: Shared Product Animation
   // Position moves from center-screen to right-aligned
   // Total Scroll: 760vh (Hero 180 + Ingredients 180 + Story 400)
-  // Hero: 0.00 to ~0.24
-  // Ingredients: ~0.24 to ~0.47
+  // Hero: 0.00 to ~0.24 (0.237)
+  // Ingredients: ~0.24 to ~0.47 (0.474)
   // Story: ~0.47 to 1.00
-  const xOutput = isMobile 
-    ? ["0vw", "0vw", "0vw", "0vw", "0vw", "0vw"] 
+  const xOutput = isMobile
+    ? ["0vw", "0vw", "0vw", "0vw", "0vw", "0vw"]
     : ["0vw", "0vw", "0vw", "0vw", "28vw", "28vw"];
-  const productXRaw = useTransform(scrollYProgress, [0, 0.20, 0.25, 0.40, 0.48, 1], xOutput);
-  const productX = useSpring(productXRaw, springConfig);
+  // New breakpoints based on 120vh Hero + 120vh Ingredients + 400vh Story = 640vh Total
+  // 80/640 = 0.125
+  // 120/640 = 0.187
+  // 240/640 = 0.375
+  // 300/640 = 0.468
+  const productX = useTransform(smoothProgress, [0, 0.125, 0.187, 0.375, 0.468, 1], xOutput);
 
   // Y movement:
-  // Starts about hand-height in Hero, moves DOWN to follow hand, then settles at 45vh (half-submerged) for IngredientsHero
-  // so that the text can comfortably appear above it.
-  // Finally, moves UP to -15vh for StorySection perfectly aligned with the text block.
-  const yOutput = isMobile
-    ? ["12vh", "10vh", "20vh", "20vh", "20vh", "20vh"]
-    : ["-2vh", "0vh", "45vh", "45vh", "5vh", "5vh"];
-  const productYRaw = useTransform(scrollYProgress, [0, 0.18, 0.25, 0.40, 0.48, 1], yOutput);
-  const productY = useSpring(productYRaw, springConfig);
+  // - Starts slightly above center (-2vh) in Hero.
+  // - Moves DOWN to follow hand (45vh) exactly during the pinned phase (0 to 80vh scroll).
+  // - Stays at 45vh during Ingredients section (up to 360vh total scroll).
+  // - Finally, moves UP to 5vh for StorySection (starts at 360vh scroll, pins at ~410vh).
+  // Keyframes (Scroll / 760):
+  // 0: Start (0)
+  // 80/760 = 0.105: End of Hero Pin (Together with hand)
+  // 180/760 = 0.237: Transition to Ingredients
+  // 360/760 = 0.474: End of Ingredients
+  // 418/760 = 0.55: Pinned in Story
+  const productY = useTransform(
+    smoothProgress,
+    [0, 0.125, 0.187, 0.375, 0.468, 1],
+    isMobile
+      ? ["12vh", "12vh", "20vh", "20vh", "10vh", "10vh"]
+      : ["-2vh", "45vh", "45vh", "45vh", "5vh", "5vh"]
+  );
 
   // Ensure constant product scale across sections
   const scaleOutput = isMobile ? [1.0, 1.0] : [1.15, 1.15];
-  const productScaleRaw = useTransform(scrollYProgress, [0, 1], scaleOutput);
-  const productScale = useSpring(productScaleRaw, springConfig);
+  const productScale = useTransform(smoothProgress, [0, 1], scaleOutput);
 
-  const productOpacity = useTransform(scrollYProgress, [0, 0.985, 1], [1, 1, 1]);
+  const productOpacity = useTransform(smoothProgress, [0, 0.985, 1], [1, 1, 1]);
 
   return (
     <>
@@ -121,7 +133,6 @@ const Index = () => {
       <ProblemSolutionSection />
       <ResultsSection />
       <TestimonialSection />
-
       <CommunitySection />
       <ProductPreviewSection />
       <TrustStrip />

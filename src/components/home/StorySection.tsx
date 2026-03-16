@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
 
 const stories = [
@@ -31,32 +31,39 @@ const StorySection = () => {
     offset: ["start start", "end end"],
   });
 
+  // Use smooth spring for the story transitions
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 60, damping: 20 });
+
   return (
     <section 
       ref={containerRef}
-      className="relative bg-transparent h-[400vh] overflow-visible"
+      className="relative bg-transparent h-[350vh] overflow-visible"
     >
       <div className="sticky top-0 h-screen w-full flex items-center overflow-hidden">
         <div className="section-container w-full px-4 sm:px-8 xl:px-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-            {/* Left - Text Blocks (One by one) */}
-            <div className="relative h-[500px] md:h-[300px] xl:h-[350px] flex items-start pt-[12vh] md:pt-0 md:items-center">
+            {/* Left - Text Blocks (Sequential Slide Reveal) */}
+            <div className="relative h-[500px] md:h-[400px] xl:h-[450px] flex items-start pt-[12vh] md:pt-0 md:items-center">
               {stories.map((story, i) => {
                 const start = i / stories.length;
                 const end = (i + 1) / stories.length;
                 
-                // Opacity: fade in and out
+                // Entry phase: start to start + 0.12
+                // Hold phase: start + 0.12 to end - 0.12
+                // Exit phase: end - 0.12 to end
+                
+                 // Opacity: fade in then fade out (very fast reveal for sharp #3A3D38 color)
                 const opacity = useTransform(
-                  scrollYProgress,
-                  [start, start + 0.1, end - 0.1, end],
+                  smoothProgress,
+                  [start, start + 0.02, end - 0.02, end],
                   [0, 1, 1, 0]
                 );
                 
-                // Y transform: slide up then exit up
+                // Y transform: slide in from bottom (150px) to center (0), then exit upward (-150px)
                 const y = useTransform(
-                  scrollYProgress,
-                  [start, start + 0.1, end - 0.1, end],
-                  [20, 0, 0, -20]
+                  smoothProgress,
+                  [start, start + 0.08, end - 0.08, end],
+                  [150, 0, 0, -150]
                 );
 
                 return (
@@ -66,10 +73,10 @@ const StorySection = () => {
                     className="absolute inset-x-0 top-[5vh] md:top-auto md:inset-0 flex flex-col justify-start md:justify-center"
                   >
                     <span className="badge-green mb-4 md:mb-6 inline-block w-fit">{story.num}</span>
-                    <h2 className="font-geist font-medium text-[30px] sm:text-3xl md:text-4xl lg:text-5xl tracking-tight text-[#3A3D38] leading-tight whitespace-pre-line mb-4 md:mb-6 md:max-w-none">
+                    <h2 className="font-geist font-medium text-[36px] sm:text-4xl md:text-5xl lg:text-6xl tracking-tight text-[#3A3D38] leading-tight whitespace-pre-line mb-6 md:mb-8 md:max-w-none">
                       {story.title}
                     </h2>
-                    <p className="text-[#545454] font-geist font-medium text-[15px] md:text-base leading-relaxed  md:max-w-md">
+                    <p className="text-[#3A3D38] font-geist font-medium text-[16px] md:text-lg leading-relaxed md:max-w-md">
                       {story.desc}
                     </p>
                   </motion.div>

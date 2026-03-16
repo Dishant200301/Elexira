@@ -10,7 +10,7 @@ const TrustStrip = () => {
   const duplicated = [...items, ...items, ...items, ...items, ...items, ...items];
 
   return (
-    <section className="bg-[#F8F5F0] overflow-hidden">
+    <section className="bg-[#F8F5F0] section-container overflow-x-hidden mx-auto">
       <div className="ticker-track-reverse !gap-6">
 
         {duplicated.map((item, i) => (

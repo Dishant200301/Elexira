@@ -29,7 +29,7 @@ const articles = [
 
 const JournalSection = () => {
   return (
-    <section className="bg-[#F8F5F0] pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden relative border-t border-[#E5E5E5]">
+    <section className="bg-[#F8F5F0] pt-24 pb-16 md:pt-32 md:pb-24 relative border-t border-[#E5E5E5]">
       <div className="section-container px-4 md:px-8 lg:px-[44px] max-w-[1600px] mx-auto">
         <FadeInSection>
           <div className="flex justify-between items-end mb-8 md:mb-12">

@@ -101,8 +101,8 @@ const TestimonialSection = () => {
 
   // Opacity of labels: Keep them longer on mobile, disappear immediately at the end on desktop
   const labelOpacity = useTransform(
-    smoothProgress, 
-    isMobile ? [0.98, 1] : [0.94, 0.95], 
+    smoothProgress,
+    isMobile ? [0.98, 1] : [0.94, 0.95],
     [1, 0]
   );
 
@@ -123,7 +123,7 @@ const TestimonialSection = () => {
 
   return (
     <section ref={containerRef} className="relative h-[150vh] md:h-[400vh] bg-[#F8F5F0] ">
-      <div className="sticky top-0 h-screen w-full flex items-center justify-center ">
+      <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
         {/* Background Typography */}
         <div className={`absolute inset-0 flex flex-col items-center justify-center pointer-events-none px-4 ${isMobile ? 'z-0' : ''}`}>
           <div style={{ transform: isMobile ? 'none' : `scale(${scaleFactor})`, transformOrigin: 'center center' }}>

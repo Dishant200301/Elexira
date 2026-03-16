@@ -43,7 +43,7 @@ const CommunitySection = () => {
   const galleryOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
   return (
-    <section ref={containerRef} className="relative z-30 bg-[#F8F5F0] md:bg-transparent mt-[100px] md:mt-[-30vh] pb-12 md:pb-10 overflow-hidden flex flex-col items-center">
+    <section ref={containerRef} className=" relative z-30 bg-[#F8F5F0] md:bg-transparent mt-[100px] md:mt-[-30vh] pb-12 md:pb-10 overflow-hidden flex flex-col items-center">
       
       {/* Mobile-only Intro Headline - Shows at the top of section naturally */}
       <motion.div 
